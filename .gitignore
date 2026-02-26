@@ -1,0 +1,18 @@
+# Godot
+.import/
+.godot/
+.mono/
+*.uid
+
+# IDE
+.idea/
+.vscode/
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# .NET
+bin/
+obj/
