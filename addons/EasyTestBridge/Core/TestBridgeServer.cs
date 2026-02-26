@@ -31,21 +31,23 @@ public partial class TestBridgeServer : Node
         var err = _tcp.Listen((ushort)_port);
         if (err != Error.Ok)
         {
-            GD.PrintErr($"[TestBridgeServer] Failed to start: {err}");
+            GD.PrintErr($"[TestBridgeServer] 启动失败: {err}");
             return;
         }
     }
 
     public override void _Process(double delta)
     {
+        // 接受新连接
         while (_tcp.IsConnectionAvailable())
         {
             var peer = new WebSocketPeer();
             peer.AcceptStream(_tcp.TakeConnection());
             _clients.Add(peer);
-            GD.Print("[TestBridgeServer] Client connected");
+            GD.Print("[TestBridgeServer] 客户端连入");
         }
 
+        // 处理消息
         for (int i = _clients.Count - 1; i >= 0; i--)
         {
             var client = _clients[i];
@@ -68,7 +70,7 @@ public partial class TestBridgeServer : Node
                 }
                 catch (Exception e)
                 {
-                    GD.PrintErr($"[TestBridgeServer] Message processing error: {e.Message}");
+                    GD.PrintErr($"[TestBridgeServer] 处理消息异常: {e.Message}");
                 }
             }
         }
@@ -94,6 +96,8 @@ public partial class TestBridgeServer : Node
                 "logs" => _collector.GetLogs(root),
                 "screenshot" => _collector.TakeScreenshot(),
                 "scene" => _collector.GetSceneTree(root),
+                "find" => _collector.FindNodes(root),
+                "inspect" => _collector.GetNodeByPath(root),
                 "test" => _testRunner?.handleTestCommand(root)
                     ?? Respond(false, "test runner not available"),
                 "test_result" => _testRunner?.handleTestResultCommand()

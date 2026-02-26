@@ -47,7 +47,7 @@ public partial class TestRunner : Node
     public void registerSuite(object suite)
     {
         _suites.Add(suite);
-        GD.Print($"[TestRunner] Registered test suite: {suite.GetType().Name}");
+        GD.Print($"[TestRunner] 注册测试套件: {suite.GetType().Name}");
     }
 
     /// <summary>运行所有匹配的测试</summary>
@@ -147,7 +147,7 @@ public partial class TestRunner : Node
         var result = new TestResult { Name = testName, Tag = attr.Tag };
         var startTime = Time.GetTicksMsec();
 
-        GD.Print($"[TestRunner] Running: {testName}");
+        GD.Print($"[TestRunner] 运行: {testName}");
 
         try
         {
@@ -193,7 +193,7 @@ public partial class TestRunner : Node
         var status = result.Passed ? "PASS" : "FAIL";
         GD.Print($"[TestRunner] {status}: {testName} ({result.DurationMs}ms)");
         if (!result.Passed)
-            GD.PrintErr($"[TestRunner]   Error: {result.Error}");
+            GD.PrintErr($"[TestRunner]   错误: {result.Error}");
 
         return result;
     }
@@ -212,13 +212,13 @@ public partial class TestRunner : Node
     private static void logReport(TestReport report)
     {
         GD.Print("========================================");
-        GD.Print($"[TestRunner] Tests completed: {report.Total} total, " +
-                 $"{report.Passed} passed, {report.Failed} failed " +
+        GD.Print($"[TestRunner] 测试完成: {report.Total} 总计, " +
+                 $"{report.Passed} 通过, {report.Failed} 失败 " +
                  $"({report.TotalDurationMs}ms)");
 
         if (report.Failed > 0)
         {
-            GD.PrintErr("[TestRunner] Failed tests:");
+            GD.PrintErr("[TestRunner] 失败的测试:");
             foreach (var r in report.Results.Where(r => !r.Passed))
                 GD.PrintErr($"  - {r.Name}: {r.Error}");
         }

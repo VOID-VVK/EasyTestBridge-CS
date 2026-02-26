@@ -8,6 +8,9 @@ public partial class EasyTestBridgeConfig : Resource
     /// <summary>WebSocket 监听端口</summary>
     [Export] public int Port { get; set; } = 9876;
 
+    /// <summary>HTTP 监听端口</summary>
+    [Export] public int HttpPort { get; set; } = 9877;
+
     /// <summary>是否启用 WebSocket 服务器</summary>
     [Export] public bool EnableWebSocket { get; set; } = true;
 

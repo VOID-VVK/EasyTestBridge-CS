@@ -76,6 +76,7 @@ public class InputSimulator
         var action = actionProp.GetString()!;
         Godot.Input.ActionPress(action);
 
+        // 下一帧释放
         var tree = Engine.GetMainLoop() as SceneTree;
         tree?.CreateTimer(0.1).Connect("timeout", Callable.From(() => Godot.Input.ActionRelease(action)));
 

@@ -19,7 +19,7 @@ public class TestableRegistry
     public void Register(string name, Node node)
     {
         _nodes[name] = node;
-        GD.Print($"[TestableRegistry] Registered node: {name}");
+        GD.Print($"[TestableRegistry] 注册节点: {name}");
     }
 
     /// <summary>注销节点</summary>

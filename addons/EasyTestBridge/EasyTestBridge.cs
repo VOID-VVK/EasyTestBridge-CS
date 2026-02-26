@@ -32,6 +32,9 @@ public partial class EasyTestBridge : Node
     /// <summary>WebSocket 服务器</summary>
     private TestBridgeServer? _server;
 
+    /// <summary>HTTP 桥接</summary>
+    private HttpBridge? _http;
+
     /// <summary>是否已启动</summary>
     public bool IsRunning { get; private set; }
 
@@ -39,7 +42,7 @@ public partial class EasyTestBridge : Node
     {
         if (!OS.IsDebugBuild())
         {
-            GD.Print("[EasyTestBridge] Release mode, disabled");
+            GD.Print("[EasyTestBridge] 发布模式，已禁用");
             return;
         }
 
@@ -52,8 +55,13 @@ public partial class EasyTestBridge : Node
         _server.Setup(Registry, InputSim, Collector, TestRunner, Config.Port);
         AddChild(_server);
 
+        // 启动 HTTP 桥接
+        _http = new HttpBridge();
+        _http.Setup(_server, Config.HttpPort);
+        AddChild(_http);
+
         IsRunning = true;
-        GD.Print($"[EasyTestBridge] Started, WebSocket listening on ws://localhost:{Config.Port}");
+        GD.Print($"[EasyTestBridge] 已启动，WebSocket ws://localhost:{Config.Port} | HTTP http://localhost:{Config.HttpPort}");
 
         // 自动运行测试（延迟到下一帧，等游戏节点注册完毕）
         if (Config.RunTestsOnStart)
@@ -62,6 +70,7 @@ public partial class EasyTestBridge : Node
 
     public override void _ExitTree()
     {
+        _http?.Shutdown();
         _server?.Shutdown();
         IsRunning = false;
     }
