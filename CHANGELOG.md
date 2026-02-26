@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0] - 2026-02-26
+
+### Added
+- HTTP API server (port 9877) — zero-dependency alternative to WebSocket, use with `curl`
+- `find` command — search nodes by name or type (fuzzy match)
+- `inspect` command — inspect any node's public properties by path
+- All existing WebSocket commands accessible via HTTP GET
+
+### Changed
+- `TestBridgeServer.HandleMessage` is now public for HTTP bridge reuse
+
 ## [1.0.0] - 2026-02-26
 
 ### Added

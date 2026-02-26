@@ -182,6 +182,55 @@ Get the scene tree structure.
 - `depth`: max traversal depth (default: 3)
 - `root`: optional root node path (default: viewport root)
 
+### find
+
+Search for nodes in the scene tree by name or type (fuzzy match).
+
+```json
+{"cmd": "find", "name": "Player"}
+{"cmd": "find", "type": "TownPlayer"}
+```
+
+- `name`: substring match against node names (case-insensitive)
+- `type`: substring match against node class names (case-insensitive)
+- At least one of `name` or `type` is required
+
+Response:
+```json
+{
+  "ok": true,
+  "data": [
+    {"name": "Player", "type": "TownPlayer", "path": "/root/Town/Player"}
+  ]
+}
+```
+
+### inspect
+
+Inspect any node's public properties by its scene tree path.
+
+```json
+{"cmd": "inspect", "path": "/root/Town/Player"}
+```
+
+- `path`: absolute scene tree path to the node
+
+Response:
+```json
+{
+  "ok": true,
+  "data": {
+    "name": "Player",
+    "type": "TownPlayer",
+    "path": "/root/Town/Player",
+    "properties": {
+      "GridPosition": "(7, 10)",
+      "Health": "100"
+    }
+  }
+}
+```
+
 ### test
 
 Run tests (optionally filtered).

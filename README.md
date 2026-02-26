@@ -7,7 +7,9 @@ EasyTestBridge runs inside your game as an autoload singleton. It provides a Web
 ## Features
 
 - **WebSocket Server** (port 9876) for remote game inspection
+- **HTTP API** (port 9877) — zero-dependency alternative, use with `curl`
 - **Node Registration** and state inspection via reflection
+- **Scene Search** — find nodes by name/type, inspect any node's properties
 - **Input Simulation** — keyboard, mouse, actions, text
 - **State Capture** — FPS/memory metrics, log collection, viewport screenshots, scene tree
 - **Built-in Test Runner** with `[GameTest]` attribute
@@ -107,6 +109,7 @@ Tests run automatically on startup when `RunTestsOnStart = true` (default).
 | Property | Default | Description |
 |----------|---------|-------------|
 | `Port` | 9876 | WebSocket listen port |
+| `HttpPort` | 9877 | HTTP API listen port |
 | `EnableWebSocket` | true | Enable/disable WebSocket server |
 | `MaxClients` | 4 | Max concurrent WebSocket clients |
 | `ScreenshotQuality` | 75 | Screenshot quality (0-100) |
@@ -128,10 +131,39 @@ Connect to `ws://localhost:9876` and send JSON:
 | `logs` | `{"cmd":"logs","last":20}` | Get recent logs |
 | `screenshot` | `{"cmd":"screenshot"}` | Capture viewport |
 | `scene` | `{"cmd":"scene","depth":3}` | Get scene tree |
+| `find` | `{"cmd":"find","name":"Player"}` | Search nodes by name/type |
+| `inspect` | `{"cmd":"inspect","path":"/root/Town/Player"}` | Inspect any node's properties |
 | `test` | `{"cmd":"test"}` | Run tests |
 | `test_result` | `{"cmd":"test_result"}` | Get test results |
 
 See [docs/websocket-protocol.md](docs/websocket-protocol.md) for full protocol reference.
+
+## HTTP API
+
+All commands are also available via HTTP GET on port 9877. The URL path maps to the command name, and query parameters become command arguments. No dependencies needed — just use `curl`.
+
+```bash
+# Health check
+curl -s "localhost:9877/ping"
+
+# Scene tree (depth limited)
+curl -s "localhost:9877/scene?depth=3"
+
+# Search nodes by name or type
+curl -s "localhost:9877/find?name=Player"
+curl -s "localhost:9877/find?type=TownPlayer"
+
+# Inspect any node's public properties
+curl -s "localhost:9877/inspect?path=/root/Town/Player"
+
+# Get registered node state
+curl -s "localhost:9877/get?node=player"
+
+# Call a registered action
+curl -s "localhost:9877/call?action=interact_SaveNPC"
+```
+
+> Note: In zsh, `?` is a glob character — always quote URLs.
 
 ## TestAssert API
 
