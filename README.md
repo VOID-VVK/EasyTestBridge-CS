@@ -1,4 +1,4 @@
-# EasyTestBridge
+# EasyTestBridge-CS
 
 An in-game testing bridge for Godot 4 C# projects.
 

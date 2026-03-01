@@ -4,7 +4,7 @@
 
 [application]
 
-config/name="EasyTestBridge"
+config/name="EasyTestBridge-CS"
 config/features=PackedStringArray("4.6", "C#")
 run/main_scene="res://demo/Scenes/DemoScene.tscn"
 
